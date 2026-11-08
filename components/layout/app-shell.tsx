@@ -14,6 +14,8 @@ const NAV = [
   { href: '/ranking', label: '랭킹' },
   { href: '/calendar', label: '달력' },
   { href: '/stats', label: '통계' },
+  { href: '/community', label: '커뮤니티' },
+  { href: '/notices', label: '공지' },
 ]
 
 export function AppShell({ children }: { children: (user: ShellUser) => ReactNode }) {
