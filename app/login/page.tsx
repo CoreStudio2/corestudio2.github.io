@@ -17,7 +17,11 @@ export default function LoginPage() {
         <div className="rounded-xl border bg-card p-6 shadow-sm sm:p-8">
           <LoginForm />
         </div>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          아직 계정이 없나요? <a href="/signup/" className="text-foreground underline">회원가입</a>
+        </p>
       </div>
     </main>
   )
 }
+
