@@ -131,6 +131,9 @@ export function Dashboard() {
           <a href="/" className="text-base font-semibold tracking-[0.32em]">ANANTHEO</a>
           <div className="flex items-center gap-3">
             <a href="/study" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">학습 기록</a>
+            <a href="/ranking" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">랭킹</a>
+            <a href="/calendar" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">달력</a>
+            <a href="/stats" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">통계</a>
             {profile?.role === 'admin' && (
               <a href="/admin" className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium hover:bg-neutral-50">
                 <ShieldCheck size={14} /> 관리자
