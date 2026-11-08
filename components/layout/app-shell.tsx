@@ -16,6 +16,10 @@ const NAV = [
   { href: '/stats', label: '통계' },
   { href: '/community', label: '커뮤니티' },
   { href: '/notices', label: '공지' },
+  { href: '/challenges', label: '챌린지' },
+  { href: '/quotes', label: '문장' },
+  { href: '/titles', label: '칭호' },
+  { href: '/profile', label: '프로필' },
 ]
 
 export function AppShell({ children }: { children: (user: ShellUser) => ReactNode }) {
