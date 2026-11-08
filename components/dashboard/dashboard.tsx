@@ -136,6 +136,10 @@ export function Dashboard() {
             <a href="/stats" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">통계</a>
             <a href="/community" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">커뮤니티</a>
             <a href="/notices" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">공지</a>
+            <a href="/challenges" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">챌린지</a>
+            <a href="/quotes" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">문장</a>
+            <a href="/titles" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">칭호</a>
+            <a href="/profile" className="rounded-full px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100">프로필</a>
             {profile?.role === 'admin' && (
               <a href="/admin" className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium hover:bg-neutral-50">
                 <ShieldCheck size={14} /> 관리자
