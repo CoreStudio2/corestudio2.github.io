@@ -11,12 +11,16 @@ export type ShellUser = { id: string; username: string; display_name: string | n
 const NAV = [
   { href: '/', label: '홈' },
   { href: '/study', label: '학습 기록' },
+  { href: '/ranking', label: '랭킹' },
+  { href: '/calendar', label: '달력' },
+  { href: '/stats', label: '통계' },
 ]
 
 export function AppShell({ children }: { children: (user: ShellUser) => ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState<ShellUser | null>(null)
+  const current = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname
 
   useEffect(() => {
     const supabase = getSupabaseClient()
@@ -53,12 +57,12 @@ export function AppShell({ children }: { children: (user: ShellUser) => ReactNod
   return (
     <div className="min-h-svh bg-[#fafafa] text-neutral-950">
       <header className="sticky top-0 z-10 border-b border-neutral-200/80 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-4 sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3 sm:px-8 sm:py-4">
           <Link href="/" className="text-base font-semibold tracking-[0.32em]">ANANTHEO</Link>
-          <nav className="flex items-center gap-1 text-sm">
+          <nav className="flex max-w-full items-center gap-1 overflow-x-auto text-sm whitespace-nowrap">
             {NAV.map((n) => (
               <Link key={n.href} href={n.href}
-                className={`rounded-full px-3 py-2 ${pathname === n.href ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100'}`}>
+                className={`rounded-full px-3 py-2 ${current === n.href ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:bg-neutral-100'}`}>
                 {n.label}
               </Link>
             ))}
